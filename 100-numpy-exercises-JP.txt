@@ -291,10 +291,76 @@ for index, value in np.ndenumerate(Z):
 for index in np.ndindex(Z.shape):
     print(index, Z[index])
 
-48．配列のような包括的な 2D ガウス分布を作る(★★☆)。
+48．配列のような包括的な 二次元ガウス分布を作る(★★☆)。
 X, Y = np.meshgrid(np.linspace(-1,1,10), np.linspace(-1,1,10))
 D = np.sqrt(X*X+Y*Y)
 sigma, mu = 1.0, 0.0
 G = np.exp(-( (D-mu)**2 / ( 2.0 * sigma**2 ) ) )
 print(G)
 
+49．二次元配列にランダムに要素 p を配置する方法は？(★★☆)
+# Author: Divakar
+
+n = 10
+p = 3
+Z = np.zeros((n,n))
+np.put(Z, np.random.choice(range(n*n), p, replace=False),1)
+
+50．行列のそれぞれの行の平均を引く(★★☆)
+# Author: Warren Weckesser
+
+X = np.random.rand(5, 10)
+
+# Recent versions of numpy
+Y = X - X.mean(axis=1, keepdims=True)
+
+# Older versions of numpy
+Y = X - X.mean(axis=1).reshape(-1, 1)
+
+51．配列を n 番目の列でソートする方法は？(★★☆)
+# Author: Steve Tjoa
+
+Z = np.random.randint(0,10,(3,3))
+print(Z)
+print(Z[Z[:,1].argsort()])
+
+52．与えられた二次元配列に null の列があるかどうか調べる方法は？(★★☆)
+# Author: Warren Weckesser
+
+Z = np.random.randint(0,3,(3,10))
+print((~Z.any(axis=0)).any())
+
+53．配列の与えられた値から最も近い値を見つける(★★☆)。
+Z = np.random.uniform(0,1,10)
+z = 0.5
+m = Z.flat[np.abs(Z - z).argmin()]
+print(m)
+
+54．name 属性のある配列クラスを作る(★★☆)。
+class NamedArray(np.ndarray):
+    def __new__(cls, array, name="no name"):
+        obj = np.asarray(array).view(cls)
+        obj.name = name
+        return obj
+    def __array_finalize__(self, obj):
+        if obj is None: return
+        self.info = getattr(obj, 'name', "no name")
+
+Z = NamedArray(np.arange(10), "range_10")
+print (Z.name)
+
+55．与えられたベクタを考え、２番目のベクタに指されたそれぞれの要素に 1 加える方法は(繰り返しインデックスに注意)？(★★★)
+# Author: Brett Olsen
+
+Z = np.ones(10)
+I = np.random.randint(0,len(Z),20)
+Z += np.bincount(I, minlength=len(Z))
+print(Z)
+
+56．インデックス・リスト( I )に基づいて配列( F )にベクタ( X )の要素を累積する方法は？(★★★)
+# Author: Alan G Isaac
+
+X = [1,2,3,4,5,6]
+I = [1,3,9,3,4,1]
+F = np.bincount(I,X)
+print(F)
