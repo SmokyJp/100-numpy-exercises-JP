@@ -1,0 +1,300 @@
+☆100 Numpy 演習( http://www.labri.fr/perso/nrougier/teaching/numpy.100/index.html ）
+Numpy コミュニティの共同努力
+
+目標は新しいユーザと古いユーザにクイック・リファレンスを提供して、教える人に一連の演習も提供することである。
+(短い)問題を尋ねたり答えたりしたことを覚えていれば、プル・リクエストを送ることができる。
+形式は：
+
+#. Find indices of non-zero elements from [1,2,0,0,4,0]
+
+   .. code:: python
+
+      # Author: Somebody
+
+      print(np.nonzero([1,2,0,0,4,0]))
+
+これまでのページの外観はここにある：
+
+http://www.labri.fr/perso/nrougier/teaching/numpy.100/index.html
+
+リポジトリは：https://github.com/rougier/numpy-100
+
+ありがとう Michiaki Ariga、今は Julia 版(https://github.com/chezou/julia-100-exercises)がある。
+
+１．np という名前で numpy パッケージをインポートする(★☆☆)。
+import numpy as np
+
+２．numpy のバージョンと設定を表示する(★☆☆)。
+print(np.__version__)
+np.show_config()
+
+３．サイズが 10 の null ベクタを作る(★☆☆)。
+Z = np.zeros(10)
+print(Z)
+
+４．numpy の add 関数のドキュメントをコマンド・ラインから得る方法は？(★☆☆)
+python -c "import numpy; numpy.info(numpy.add)"
+
+５．サイズが 10 の null ベクタで５番目の値が 1 のものを作る(★☆☆)。
+Z = np.zeros(10)
+Z[4] = 1
+print(Z)
+
+６．値の範囲が 10 から 49 のベクタを作る(★☆☆)。
+Z = np.arange(10,50)
+print(Z)
+
+７．ベクタを反転させる(最初の要素が最後になる)(★☆☆)。
+Z = np.arange(50)
+Z = Z[::-1]
+
+８．値の範囲が 0 から 8 の 3 x 3 行列を作る(★☆☆)。
+Z = np.arange(9).reshape(3,3)
+print(Z)
+
+９．[1,2,0,0,4,0] から非ゼロの要素のインデックスを見つける(★☆☆)。
+nz = np.nonzero([1,2,0,0,4,0])
+print(nz)
+
+10．3 x 3 の単位行列を作る(★☆☆)。
+Z = np.eye(3)
+print(Z)
+
+11．ランダムな値で 3 x 3 x 3 の配列を作る(★☆☆)。
+Z = np.random.random((3,3,3))
+print(Z)
+
+12．ランダムな値で 10 x 10 の配列を作って最小と最大の値を見つける(★☆☆)。
+Z = np.random.random((10,10))
+Zmin, Zmax = Z.min(), Z.max()
+print(Zmin, Zmax)
+
+13．サイズが 30 のランダムなベクタを作って平均値を見つける(★☆☆)。
+Z = np.random.random(30)
+m = Z.mean()
+print(m)
+
+14．境界が 1 で内部が 0 の２次元配列を作る(★☆☆)。
+Z = np.ones((10,10))
+Z[1:-1,1:-1] = 0
+
+15．次の式の結果は何か？(★☆☆)
+0 * np.nan
+np.nan == np.nan
+np.inf > np.nan
+np.nan - np.nan
+0.3 == 3 * 0.1
+
+16．対角線のすぐ下が 1,2,3,4 の値の 5 x 5 の行列を作る(★☆☆)。
+Z = np.diag(1+np.arange(4),k=-1)
+print(Z)
+
+17．8 x 8 の行列を作って市松模様で満たす(★☆☆)。
+Z = np.zeros((8,8),dtype=int)
+Z[1::2,::2] = 1
+Z[::2,1::2] = 1
+print(Z)
+
+18．(6,7,8) の形状の配列を考えるとき、100 番目の要素のインデックス (x,y,z) は何か？(※難易度未設定)
+print(np.unravel_index(100,(6,7,8)))
+
+19．tile 関数を使って市松模様の 8 x 8 の行列を作る(★☆☆)。
+Z = np.tile( np.array([[0,1],[1,0]]), (4,4))
+print(Z)
+
+20．5 x 5 のランダムな行列を正規化する(★☆☆)
+Z = np.random.random((5,5))
+Zmax, Zmin = Z.max(), Z.min()
+Z = (Z - Zmin)/(Zmax - Zmin)
+print(Z)
+
+21．４つの符号なしバイト( RGBA )で色を表したカスタムな dtype を作る(★☆☆)。
+color = np.dtype([("r", np.ubyte, 1),
+                  ("g", np.ubyte, 1),
+                  ("b", np.ubyte, 1),
+                  ("a", np.ubyte, 1)])
+
+22．5 x 3 行列と 3 x 2 行列をかける(実行列の積)
+Z = np.dot(np.ones((5,3)), np.ones((3,2)))
+print(Z)
+
+[2018/08/24]
+23．与えられた一次元配列で、3 から 8 の場所の全ての要素を否定する(★☆☆)。
+# Author: Evgeni Burovski
+
+Z = np.arange(11)
+Z[(3 < Z) & (Z <= 8)] *= -1
+
+24．次のスクリプトの出力は何か？(★☆☆)
+# Author: Jake VanderPlas
+
+print(sum(range(5),-1))
+from numpy import *
+print(sum(range(5),-1))
+
+25．整数ベクタ Z を考えるとき、これらの式は適切か？(★☆☆)
+Z**Z
+2 << Z >> 2
+Z <- Z
+1j*Z
+Z/1/1
+Z<Z>Z
+
+26．次の式の結果は何か？(※難易度未設定)
+np.array(0) // np.array(0)
+
+np.array(0) // np.array(0.)
+np.array(0) / np.array(0)
+np.array(0) / np.array(0.)
+
+27．浮動小数点型配列をゼロから丸める方法は？(★☆☆)
+# Author: Charles R Harris
+
+Z = np.random.uniform(-10,+10,10)
+print (np.trunc(Z + np.copysign(0.5, Z)))
+
+28．５つの異なる方法を使ってランダムな配列の整数部分を抜き出す(★★☆)。
+Z = np.random.uniform(0,10,10)
+
+print (Z - Z%1)
+print (np.floor(Z))
+print (np.ceil(Z)-1)
+print (Z.astype(int))
+print (np.trunc(Z))
+
+29．行の値が 0 から 4 の範囲の 5 x 5 行列を作る(★★☆)。
+Z = np.zeros((5,5))
+Z += np.arange(5)
+print(Z)
+
+30．10 個の整数を生成してそれを配列の構成に使う生成関数を考える(★☆☆)。
+def generate():
+    for x in xrange(10):
+        yield x
+Z = np.fromiter(generate(),dtype=float,count=-1)
+print(Z)
+
+31．値の範囲が 0 から 1 で 0 と 1 を含まないサイズが 10 のベクタを作る(★★☆)。
+Z = np.linspace(0,1,12,endpoint=True)[1:-1]
+print(Z)
+
+32．サイズが 10 のランダムなベクタを作ってソートする(★★☆)。
+Z = np.random.random(10)
+Z.sort()
+print(Z)
+
+33．np.sum より早く小さな配列を合計する方法は？(★★☆)
+# Author: Evgeni Burovski
+
+Z = np.arange(10)
+np.add.reduce(Z)
+
+34．２つのランダムな配列 A と B を考えてそれらが等しいかどうかチェックする(★★☆)。
+A = np.random.randint(0,2,5)
+B = np.random.randint(0,2,5)
+equal = np.allclose(A,B)
+print(equal)
+
+35．イミュータブルな(読み出し専用)配列を作る(★★☆)。
+Z = np.zeros(10)
+Z.flags.writeable = False
+Z[0] = 1
+
+36．直交座標を表すランダムな 10 x 2 の行列を考えて極座標に変換する(★★☆)。
+Z = np.random.random((10,2))
+X,Y = Z[:,0], Z[:,1]
+R = np.sqrt(X**2+Y**2)
+T = np.arctan2(Y,X)
+print(R)
+print(T)
+
+37．サイズが 10 のランダムなベクタを作って最大値を 0 に置き換える(★★☆)。
+Z = np.random.random(10)
+Z[Z.argmax()] = 0
+print(Z)
+
+38．[0,1]x[0,1] の領域を占める xy 座標系の構造体配列を作る(★★☆)。
+Z = np.zeros((10,10), [('x',float),('y',float)])
+Z['x'], Z['y'] = np.meshgrid(np.linspace(0,1,10),
+                             np.linspace(0,1,10))
+print(Z)
+
+39．X と Y という２つの配列が与えられるとき Cauchy 行列 C (Cij = 1/(xi - yj))を構成する(※難易度未設定)。
+# Author: Evgeni Burovski
+
+X = np.arange(8)
+Y = X + 0.5
+C = 1.0 / np.subtract.outer(X, Y)
+print(np.linalg.det(C))
+
+40．それぞれの numpy のスカラ型で表せる最大値と最小値を表示する(★★☆)。
+for dtype in [np.int8, np.int32, np.int64]:
+   print(np.iinfo(dtype).min)
+   print(np.iinfo(dtype).max)
+for dtype in [np.float32, np.float64]:
+   print(np.finfo(dtype).min)
+   print(np.finfo(dtype).max)
+   print(np.finfo(dtype).eps)
+
+41．配列の全ての要素を表示する方法は？(★★☆)
+np.set_printoptions(threshold=np.nan)
+Z = np.zeros((25,25))
+print(Z)
+
+42．配列内で(与えられたスカラーに)最も近い値を見つける方法は？(★★☆)
+Z = np.arange(100)
+v = np.random.uniform(0,100)
+index = (np.abs(Z-v)).argmin()
+print(Z[index])
+
+43．位置 (x,y) と色 (r,g,b) を表す構造化配列を作る(★★☆)。
+Z = np.zeros(10, [ ('position', [ ('x', float, 1),
+                                   ('y', float, 1)]),
+                    ('color',    [ ('r', float, 1),
+                                   ('g', float, 1),
+                                   ('b', float, 1)])])
+print(Z)
+
+44．座標を表す (100,2) の形のランダム・ベクトルを考えて、位置間の距離を見つける(★★☆)。
+Z = np.random.random((10,2))
+X,Y = np.atleast_2d(Z[:,0]), np.atleast_2d(Z[:,1])
+D = np.sqrt( (X-X.T)**2 + (Y-Y.T)**2)
+print(D)
+
+# Much faster with scipy
+import scipy
+# Thanks Gavin Heverly-Coulson (#issue 1)
+import scipy.spatial
+
+Z = np.random.random((10,2))
+D = scipy.spatial.distance.cdist(Z,Z)
+print(D)
+
+45．浮動小数点 (32bit) 配列を整数 (32bit) にその場で変換する方法は？(※難易度未設定)
+Z = np.arange(10, dtype=np.int32)
+Z = Z.astype(np.float32, copy=False)
+
+46．次のファイルを読む方法は？(★★☆)
+# File content:
+# -------------
+1,2,3,4,5
+6,,,7,8
+,,9,10,11
+# -------------
+
+Z = np.genfromtxt("missing.dat", delimiter=",")
+
+47．numpy の配列の列挙に相当するものは何か？(★★☆)
+Z = np.arange(9).reshape(3,3)
+for index, value in np.ndenumerate(Z):
+    print(index, value)
+for index in np.ndindex(Z.shape):
+    print(index, Z[index])
+
+48．配列のような包括的な 2D ガウス分布を作る(★★☆)。
+X, Y = np.meshgrid(np.linspace(-1,1,10), np.linspace(-1,1,10))
+D = np.sqrt(X*X+Y*Y)
+sigma, mu = 1.0, 0.0
+G = np.exp(-( (D-mu)**2 / ( 2.0 * sigma**2 ) ) )
+print(G)
+
