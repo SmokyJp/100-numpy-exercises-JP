@@ -449,3 +449,81 @@ def moving_average(a, n=3) :
     return ret[n - 1:] / n
 Z = np.arange(20)
 print(moving_average(Z, n=3))
+
+67．一次元配列 Z を考え、最初の行が (Z[0],Z[1],Z[2]) で、それぞれに続く行が 1 ずつずれた二次元配列を構築する(最後の行は (Z[-3],Z[-2],Z[-1]) になるはず)(★★★)。
+# Author: Joe Kington / Erik Rigtorp
+from numpy.lib import stride_tricks
+
+def rolling(a, window):
+    shape = (a.size - window + 1, window)
+    strides = (a.itemsize, a.itemsize)
+    return stride_tricks.as_strided(a, shape=shape, strides=strides)
+Z = rolling(np.arange(10), 3)
+print(Z)
+
+68．その場でブール値の否定、あるいは浮動小数点数の符号を変更する方法は？(★★★)
+# Author: Nathaniel J. Smith
+
+Z = np.random.randint(0,2,100)
+np.logical_not(arr, out=arr)
+
+Z = np.random.uniform(-1.0,1.0,100)
+np.negative(arr, out=arr)
+
+69．直線(二次元)を表す２点 P0,P1 とひとつの点 p を考え、p とそれぞれの直線 i (P0[i],P1[i]) までの距離を計算する方法は？(★★★)
+def distance(P0, P1, p):
+    T = P1 - P0
+    L = (T**2).sum(axis=1)
+    U = -((P0[:,0]-p[...,0])*T[:,0] + (P0[:,1]-p[...,1])*T[:,1]) / L
+    U = U.reshape(len(U),1)
+    D = P0 + U*T - p
+    return np.sqrt((D**2).sum(axis=1))
+
+P0 = np.random.uniform(-10,10,(10,2))
+P1 = np.random.uniform(-10,10,(10,2))
+p  = np.random.uniform(-10,10,( 1,2))
+print(distance(P0, P1, p))
+
+70．直線(二次元)を表す２点 P0,P1 と点 P を考え、それぞれの点 j (P[j]) からそれぞれの直線 i (P0[i],P1[i]) までの距離を計算する方法は？(★★★)
+# Author: Italmassov Kuanysh
+# based on distance function from previous question
+P0 = np.random.uniform(-10, 10, (10,2))
+P1 = np.random.uniform(-10,10,(10,2))
+p = np.random.uniform(-10, 10, (10,2))
+print np.array([distance(P0,P1,p_i) for p_i in p])
+
+71．任意の配列を考え、固定形状で、与えられた要素が中央にある部分を抜き出す関数を書く(必要なら充填値で詰める)。(★★★)
+# Author: Nicolas Rougier
+
+Z = np.random.randint(0,10,(10,10))
+shape = (5,5)
+fill  = 0
+position = (1,1)
+
+R = np.ones(shape, dtype=Z.dtype)*fill
+P  = np.array(list(position)).astype(int)
+Rs = np.array(list(R.shape)).astype(int)
+Zs = np.array(list(Z.shape)).astype(int)
+
+R_start = np.zeros((len(shape),)).astype(int)
+R_stop  = np.array(list(shape)).astype(int)
+Z_start = (P-Rs//2)
+Z_stop  = (P+Rs//2)+Rs%2
+
+R_start = (R_start - np.minimum(Z_start,0)).tolist()
+Z_start = (np.maximum(Z_start,0)).tolist()
+R_stop = np.maximum(R_start, (R_stop - np.maximum(Z_stop-Zs,0))).tolist()
+Z_stop = (np.minimum(Z_stop,Zs)).tolist()
+
+r = [slice(start,stop) for start,stop in zip(R_start,R_stop)]
+z = [slice(start,stop) for start,stop in zip(Z_start,Z_stop)]
+R[r] = Z[z]
+print(Z)
+print(R)
+
+72．配列 Z = [1,2,3,4,5,6,7,8,9,10,11,12,13,14] を考え、配列 R = [[1,2,3,4], [2,3,4,5], [3,4,5,6], ..., [11,12,13,14]] を生成する方法は？(★★★)
+# Author: Stefan van der Walt
+
+Z = np.arange(1,15,dtype=uint32)
+R = stride_tricks.as_strided(Z,(11,4),(4,4))
+print(R)
