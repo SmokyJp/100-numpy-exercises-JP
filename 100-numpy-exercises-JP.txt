@@ -284,3 +284,89 @@ v = np.random.uniform(0,100)
 index = (np.abs(Z-v)).argmin()
 print(Z[index])
 
+51．位置 (x,y) と色 (r,g,b) を表す構造化配列を作る(★★☆)
+Z = np.zeros(10, [ ('position', [ ('x', float, 1),
+                                  ('y', float, 1)]),
+                   ('color',    [ ('r', float, 1),
+                                  ('g', float, 1),
+                                  ('b', float, 1)])])
+print(Z)
+
+52．座標を表す (100,2) の形のランダムなベクトルを考え、位置間の距離を見つける(★★☆)
+Z = np.random.random((10,2))
+X,Y = np.atleast_2d(Z[:,0], Z[:,1])
+D = np.sqrt( (X-X.T)**2 + (Y-Y.T)**2)
+print(D)
+
+# Much faster with scipy
+import scipy
+# Thanks Gavin Heverly-Coulson (#issue 1)
+import scipy.spatial
+
+Z = np.random.random((10,2))
+D = scipy.spatial.distance.cdist(Z,Z)
+print(D)
+
+53．浮動小数点 (32bit) 配列を整数 (32bit) にその場で変換する方法は？(※難易度未設定)
+Z = np.arange(10, dtype=np.float32)
+Z = Z.astype(np.int32, copy=False)
+print(Z)
+
+54. 次のファイルを読む方法は？(※難易度未設定)
+from io import StringIO
+
+# Fake file
+s = StringIO("""1, 2, 3, 4, 5\n
+                6,  ,  , 7, 8\n
+                 ,  , 9,10,11\n""")
+Z = np.genfromtxt(s, delimiter=",", dtype=np.int)
+print(Z)
+
+55．numpy の配列の列挙に相当するものは何か？(★★☆)
+Z = np.arange(9).reshape(3,3)
+for index, value in np.ndenumerate(Z):
+    print(index, value)
+for index in np.ndindex(Z.shape):
+    print(index, Z[index])
+
+56．配列のような包括的な 二次元ガウス分布を作る(★★☆)
+X, Y = np.meshgrid(np.linspace(-1,1,10), np.linspace(-1,1,10))
+D = np.sqrt(X*X+Y*Y)
+sigma, mu = 1.0, 0.0
+G = np.exp(-( (D-mu)**2 / ( 2.0 * sigma**2 ) ) )
+print(G)
+
+57．二次元配列にランダムに要素 p を配置する方法は？(★★☆)
+# Author: Divakar
+
+n = 10
+p = 3
+Z = np.zeros((n,n))
+np.put(Z, np.random.choice(range(n*n), p, replace=False),1)
+print(Z)
+
+58．行列のそれぞれの行の平均を引く(★★☆)
+# Author: Warren Weckesser
+
+X = np.random.rand(5, 10)
+
+# Recent versions of numpy
+Y = X - X.mean(axis=1, keepdims=True)
+
+# Older versions of numpy
+Y = X - X.mean(axis=1).reshape(-1, 1)
+
+print(Y)
+
+59．配列を n 番目の列でソートする方法は？(★★☆)
+# Author: Steve Tjoa
+
+Z = np.random.randint(0,10,(3,3))
+print(Z)
+print(Z[Z[:,1].argsort()])
+
+60．与えられた二次元配列に null の列があるかどうか調べる方法は？(★★☆)
+# Author: Warren Weckesser
+
+Z = np.random.randint(0,3,(3,10))
+print((~Z.any(axis=0)).any())
