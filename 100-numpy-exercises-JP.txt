@@ -486,3 +486,330 @@ print(A * B[:,:,None])
 A = np.arange(25).reshape(5,5)
 A[[0,1]] = A[[1,0]]
 print(A)
+
+73．(共有された頂点を持つ) 10 個の三角形を記述する 10 個の３つの値の集合を考え、全ての三角形を構成する一意の線分の集合を見つける(★★★)。
+# Author: Nicolas P. Rougier
+
+faces = np.random.randint(0,100,(10,3))
+F = np.roll(faces.repeat(2,axis=1),-1,axis=1)
+F = F.reshape(len(F)*3,2)
+F = np.sort(F,axis=1)
+G = F.view( dtype=[('p0',F.dtype),('p1',F.dtype)] )
+G = np.unique(G)
+print(G)
+
+74．bincount である配列 C が与えられ、np.bincount(A) == C のような配列 A を作る方法は？(★★★)
+# Author: Jaime Fernández del Río
+
+C = np.bincount([1,1,2,3,4,4,6])
+A = np.repeat(np.arange(len(C)), C)
+print(A)
+
+75．配列にスライドウィンドウを使って平均を計算する方法は？(★★★)
+# Author: Jaime Fernández del Río
+
+def moving_average(a, n=3) :
+    ret = np.cumsum(a, dtype=float)
+    ret[n:] = ret[n:] - ret[:-n]
+    return ret[n - 1:] / n
+Z = np.arange(20)
+print(moving_average(Z, n=3))
+
+76．一次元配列 Z を考え、最初の行が (Z[0],Z[1],Z[2]) で、それぞれに続く行が 1 ずつずれた二次元配列を構築する(最後の行は (Z[-3],Z[-2],Z[-1]) になるはず)(★★★)
+# Author: Joe Kington / Erik Rigtorp
+from numpy.lib import stride_tricks
+
+def rolling(a, window):
+    shape = (a.size - window + 1, window)
+    strides = (a.itemsize, a.itemsize)
+    return stride_tricks.as_strided(a, shape=shape, strides=strides)
+Z = rolling(np.arange(10), 3)
+print(Z)
+
+77．その場でブール値の否定、あるいは浮動小数点数の符号を変更する方法は？(★★★)
+# Author: Nathaniel J. Smith
+
+Z = np.random.randint(0,2,100)
+np.logical_not(Z, out=Z)
+
+Z = np.random.uniform(-1.0,1.0,100)
+np.negative(Z, out=Z)
+
+78．直線(二次元)を表す２点 P0,P1 とひとつの点 p を考え、p からそれぞれの直線 i (P0[i],P1[i]) までの距離を計算する方法は？(★★★)
+def distance(P0, P1, p):
+    T = P1 - P0
+    L = (T**2).sum(axis=1)
+    U = -((P0[:,0]-p[...,0])*T[:,0] + (P0[:,1]-p[...,1])*T[:,1]) / L
+    U = U.reshape(len(U),1)
+    D = P0 + U*T - p
+    return np.sqrt((D**2).sum(axis=1))
+
+P0 = np.random.uniform(-10,10,(10,2))
+P1 = np.random.uniform(-10,10,(10,2))
+p  = np.random.uniform(-10,10,( 1,2))
+print(distance(P0, P1, p))
+
+79．直線(二次元)を表す２点 P0,P1 と点 P を考え、それぞれの点 j (P[j]) からそれぞれの直線 i (P0[i],P1[i]) までの距離を計算する方法は？(★★★)
+# Author: Italmassov Kuanysh
+
+# based on distance function from previous question
+P0 = np.random.uniform(-10, 10, (10,2))
+P1 = np.random.uniform(-10,10,(10,2))
+p = np.random.uniform(-10, 10, (10,2))
+print(np.array([distance(P0,P1,p_i) for p_i in p]))
+
+80．任意の配列を考え、固定形状で、与えられた要素が中央にある部分を抜き出す関数を書く(必要なら充填値で詰める)(★★★)
+# Author: Nicolas Rougier
+
+Z = np.random.randint(0,10,(10,10))
+shape = (5,5)
+fill  = 0
+position = (1,1)
+
+R = np.ones(shape, dtype=Z.dtype)*fill
+P  = np.array(list(position)).astype(int)
+Rs = np.array(list(R.shape)).astype(int)
+Zs = np.array(list(Z.shape)).astype(int)
+
+R_start = np.zeros((len(shape),)).astype(int)
+R_stop  = np.array(list(shape)).astype(int)
+Z_start = (P-Rs//2)
+Z_stop  = (P+Rs//2)+Rs%2
+
+R_start = (R_start - np.minimum(Z_start,0)).tolist()
+Z_start = (np.maximum(Z_start,0)).tolist()
+R_stop = np.maximum(R_start, (R_stop - np.maximum(Z_stop-Zs,0))).tolist()
+Z_stop = (np.minimum(Z_stop,Zs)).tolist()
+
+r = [slice(start,stop) for start,stop in zip(R_start,R_stop)]
+z = [slice(start,stop) for start,stop in zip(Z_start,Z_stop)]
+R[r] = Z[z]
+print(Z)
+print(R)
+
+81．配列 Z = [1,2,3,4,5,6,7,8,9,10,11,12,13,14] を考え、配列 R = [[1,2,3,4], [2,3,4,5], [3,4,5,6], ..., [11,12,13,14]] を生成する方法は？(★★★)
+# Author: Stefan van der Walt
+
+Z = np.arange(1,15,dtype=np.uint32)
+R = stride_tricks.as_strided(Z,(11,4),(4,4))
+print(R)
+
+82．行列の階数(ランク)を計算する(★★★)
+# Author: Stefan van der Walt
+
+Z = np.random.uniform(0,1,(10,10))
+U, S, V = np.linalg.svd(Z) # Singular Value Decomposition
+rank = np.sum(S > 1e-10)
+print(rank)
+
+83．配列の中の最頻出値を見つける方法は？(※難易度未設定)
+Z = np.random.randint(0,10,50)
+print(np.bincount(Z).argmax())
+
+84．ランダムな 10x10 の行列から隣接する 3x3 のブロックを全て抽出する(★★★)
+# Author: Chris Barker
+
+Z = np.random.randint(0,5,(10,10))
+n = 3
+i = 1 + (Z.shape[0]-3)
+j = 1 + (Z.shape[1]-3)
+C = stride_tricks.as_strided(Z, shape=(i, j, n, n), strides=Z.strides + Z.strides)
+print(C)
+
+85．Z[i,j] == Z[j,i] のような二次元配列のサブクラスを作る(★★★)
+# Author: Eric O. Lebigot
+# Note: only works for 2d array and value setting using indices
+
+class Symetric(np.ndarray):
+    def __setitem__(self, index, value):
+        i,j = index
+        super(Symetric, self).__setitem__((i,j), value)
+        super(Symetric, self).__setitem__((j,i), value)
+
+def symetric(Z):
+    return np.asarray(Z + Z.T - np.diag(Z.diagonal())).view(Symetric)
+
+S = symetric(np.random.randint(0,10,(5,5)))
+S[2,3] = 42
+print(S)
+
+86．形状が (n,n) の行列群 p と形状が (n,1) のベクトル群 p を考える。一度に行列 p の内積の合計を計算する方法は？(結果の形状は (n,1) )(★★★)
+# Author: Stefan van der Walt
+
+p, n = 10, 20
+M = np.ones((p,n,n))
+V = np.ones((p,n,1))
+S = np.tensordot(M, V, axes=[[0, 2], [0, 1]])
+print(S)
+
+# It works, because:
+# M is (p,n,n)
+# V is (p,n,1)
+# Thus, summing over the paired axes 0 and 0 (of M and V independently),
+# and 2 and 1, to remain with a (n,1) vector.
+
+87．16x16 の配列を考え、ブロック和を得る方法は？(ブロックのサイズは 4x4 )(★★★)
+# Author: Robert Kern
+
+Z = np.ones((16,16))
+k = 4
+S = np.add.reduceat(np.add.reduceat(Z, np.arange(0, Z.shape[0], k), axis=0),
+                                       np.arange(0, Z.shape[1], k), axis=1)
+print(S)
+
+88．numpy 配列を使って Game of Life を実装する方法は？(★★★)
+# Author: Nicolas Rougier
+
+def iterate(Z):
+    # Count neighbours
+    N = (Z[0:-2,0:-2] + Z[0:-2,1:-1] + Z[0:-2,2:] +
+         Z[1:-1,0:-2]                + Z[1:-1,2:] +
+         Z[2:  ,0:-2] + Z[2:  ,1:-1] + Z[2:  ,2:])
+
+    # Apply rules
+    birth = (N==3) & (Z[1:-1,1:-1]==0)
+    survive = ((N==2) | (N==3)) & (Z[1:-1,1:-1]==1)
+    Z[...] = 0
+    Z[1:-1,1:-1][birth | survive] = 1
+    return Z
+
+Z = np.random.randint(0,2,(50,50))
+for i in range(100): Z = iterate(Z)
+print(Z)
+
+89．配列の最大値 n を得る方法は？(★★★)
+Z = np.arange(10000)
+np.random.shuffle(Z)
+n = 5
+
+# Slow
+print (Z[np.argsort(Z)[-n:]])
+
+# Fast
+print (Z[np.argpartition(-Z,n)[:n]])
+
+90．任意の数のベクトルが与えられ、デカルト積を構成する(全ての項目の全ての組合せ)(★★★)
+# Author: Stefan Van der Walt
+
+def cartesian(arrays):
+    arrays = [np.asarray(a) for a in arrays]
+    shape = (len(x) for x in arrays)
+
+    ix = np.indices(shape, dtype=int)
+    ix = ix.reshape(len(arrays), -1).T
+
+    for n, arr in enumerate(arrays):
+        ix[:, n] = arrays[n][ix[:, n]]
+
+    return ix
+
+print (cartesian(([1, 2, 3], [4, 5], [6, 7])))
+
+91．規則的な配列からレコード型配列を作る方法は？(★★★)
+Z = np.array([("Hello", 2.5, 3),
+              ("World", 3.6, 2)])
+R = np.core.records.fromarrays(Z.T,
+                               names='col1, col2, col3',
+                               formats = 'S8, f8, i8')
+print(R)
+
+92．大きなベクトル Z を考え、異なる３つの方法を使って Z の３乗を計算する(★★★)
+# Author: Ryan G.
+
+x = np.random.rand(5e7)
+
+%timeit np.power(x,3)
+%timeit x*x*x
+%timeit np.einsum('i,i,i->i',x,x,x)
+
+93．(8,3) と (2,2) の形状の２つの配列ＡとＢを考える。Ｂの要素の順序に関わらず、Ｂのそれぞれの行の要素を含むＡの行を見つける方法は？(★★★)
+# Author: Gabe Schwartz
+
+A = np.random.randint(0,5,(8,3))
+B = np.random.randint(0,5,(2,2))
+
+C = (A[..., np.newaxis, np.newaxis] == B)
+rows = np.where(C.any((3,1)).all(1))[0]
+print(rows)
+
+94. 10x3 の行列を考え、等しくない値の列を抽出する(例[2,2,3])(★★★)
+# Author: Robert Kern
+
+Z = np.random.randint(0,5,(10,3))
+print(Z)
+# solution for arrays of all dtypes (including string arrays and record arrays)
+E = np.all(Z[:,1:] == Z[:,:-1], axis=1)
+U = Z[~E]
+print(U)
+# soluiton for numerical arrays only, will work for any number of columns in Z
+U = Z[Z.max(axis=1) != Z.min(axis=1),:]
+print(U)
+
+95．整数のベクトルを２進数表現の行列に変換する(★★★)
+# Author: Warren Weckesser
+
+I = np.array([0, 1, 2, 3, 15, 16, 32, 64, 128])
+B = ((I.reshape(-1,1) & (2**np.arange(8))) != 0).astype(int)
+print(B[:,::-1])
+
+# Author: Daniel T. McDonald
+
+I = np.array([0, 1, 2, 3, 15, 16, 32, 64, 128], dtype=np.uint8)
+print(np.unpackbits(I[:, np.newaxis], axis=1))
+
+96．２次元の配列が与えられ、固有の行を抜き出す方法は？(★★★)
+# Author: Jaime Fernández del Río
+
+Z = np.random.randint(0,2,(6,3))
+T = np.ascontiguousarray(Z).view(np.dtype((np.void, Z.dtype.itemsize * Z.shape[1])))
+_, idx = np.unique(T, return_index=True)
+uZ = Z[idx]
+print(uZ)
+
+97．２つのベクトルＡとＢを考え、inner、outer、sum、mul 関数と等価な einsum を書く(★★★)
+# Author: Alex Riley
+# Make sure to read: http://ajcr.net/Basic-guide-to-einsum/
+
+A = np.random.uniform(0,1,10)
+B = np.random.uniform(0,1,10)
+
+np.einsum('i->', A)       # np.sum(A)
+np.einsum('i,i->i', A, B) # A * B
+np.einsum('i,i', A, B)    # np.inner(A, B)
+np.einsum('i,j->ij', A, B)    # np.outer(A, B)
+
+98．２つのベクトル (X,Y) で記述された経路を考え、等距離サンプリングを使ってサンプリングする方法は？(★★★)
+# Author: Bas Swinckels
+
+phi = np.arange(0, 10*np.pi, 0.1)
+a = 1
+x = a*phi*np.cos(phi)
+y = a*phi*np.sin(phi)
+
+dr = (np.diff(x)**2 + np.diff(y)**2)**.5 # segment lengths
+r = np.zeros_like(x)
+r[1:] = np.cumsum(dr)                # integrate path
+r_int = np.linspace(0, r.max(), 200) # regular spaced path
+x_int = np.interp(r_int, r, x)       # integrate path
+y_int = np.interp(r_int, r, y)
+
+99．整数 n と２次元配列 X が与えられ、n 度の多項分布からの描画と解釈できる行、すなわち、整数だけを含んで合計が和が n の行を X から選択する(★★★)
+# Author: Evgeni Burovski
+
+X = np.asarray([[1.0, 0.0, 3.0, 8.0],
+                [2.0, 0.0, 1.0, 1.0],
+                [1.5, 2.5, 1.0, 0.0]])
+n = 4
+M = np.logical_and.reduce(np.mod(X, 1) == 0, axis=-1)
+M &= (X.sum(axis=-1) == n)
+print(X[M])
+
+100．一次元配列 X の平均の 95% 信頼区間を自力で計算する(すなわち、N 回置き換えることで配列の要素を再サンプルして、それぞれのサンプルの平均を計算して、そして平均値の中央値を計算する
+# Author: Jessica B. Hamrick
+
+X = np.random.randn(100) # random 1D array
+N = 1000 # number of bootstrap samples
+idx = np.random.randint(0, X.size, (N, X.size))
+means = X[idx].mean(axis=1)
+confint = np.percentile(means, [2.5, 97.5])
+print(confint)
