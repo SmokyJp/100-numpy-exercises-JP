@@ -1,0 +1,136 @@
+2.
+>>> print(np.__version__)
+1.14.5
+
+.__version__
+numpy のバージョン番号を取得
+
+>>> np.show_config()
+blas_mkl_info:
+  NOT AVAILABLE
+blis_info:
+  NOT AVAILABLE
+openblas_info:
+    library_dirs = ['C:\\projects\\numpy-wheels-jc1cl\\numpy\\build\\openblas']
+    libraries = ['openblas']
+    language = f77
+    define_macros = [('HAVE_CBLAS', None)]
+blas_opt_info:
+    library_dirs = ['C:\\projects\\numpy-wheels-jc1cl\\numpy\\build\\openblas']
+    libraries = ['openblas']
+    language = f77
+    define_macros = [('HAVE_CBLAS', None)]
+lapack_mkl_info:
+  NOT AVAILABLE
+openblas_lapack_info:
+    library_dirs = ['C:\\projects\\numpy-wheels-jc1cl\\numpy\\build\\openblas']
+    libraries = ['openblas']
+    language = f77
+    define_macros = [('HAVE_CBLAS', None)]
+lapack_opt_info:
+    library_dirs = ['C:\\projects\\numpy-wheels-jc1cl\\numpy\\build\\openblas']
+    libraries = ['openblas']
+    language = f77
+    define_macros = [('HAVE_CBLAS', None)]
+>>>
+
+.show_config()
+使用している行列ライブラリを確認
+
+3.
+>>> Z = np.zeros(10)
+>>> print(Z)
+[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+
+.zeros()
+すべての要素が 0 の配列を生成する
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.zeros.html
+
+4.
+>>> Z = np.zeros((10,10))
+>>> print("%d bytes" % (Z.size * Z.itemsize))
+800 bytes
+
+numpy.ndarray.size
+配列内の要素の数
+
+numpy.ndarray.itemsize
+配列の１要素のバイト長
+
+5.
+add(x1, x2, /, out=None, *, where=True, casting='same_kind', order='K', dtype=None, subok=True[, signature, extobj])
+
+Add arguments element-wise.
+
+Parameters
+----------
+x1, x2 : array_like
+    The arrays to be added.  If ``x1.shape != x2.shape``, they must be
+    broadcastable to a common shape (which may be the shape of one or
+    the other).
+out : ndarray, None, or tuple of ndarray and None, optional
+    A location into which the result is stored. If provided, it must have
+    a shape that the inputs broadcast to. If not provided or `None`,
+    a freshly-allocated array is returned. A tuple (possible only as a
+    keyword argument) must have length equal to the number of outputs.
+where : array_like, optional
+    Values of True indicate to calculate the ufunc at that position, values
+    of False indicate to leave the value in the output alone.
+**kwargs
+    For other keyword-only arguments, see the
+    :ref:`ufunc docs <ufuncs.kwargs>`.
+
+Returns
+-------
+add : ndarray or scalar
+    The sum of `x1` and `x2`, element-wise.  Returns a scalar if
+    both  `x1` and `x2` are scalars.
+
+Notes
+-----
+Equivalent to `x1` + `x2` in terms of array broadcasting.
+
+Examples
+--------
+>>> np.add(1.0, 4.0)
+5.0
+>>> x1 = np.arange(9.0).reshape((3, 3))
+>>> x2 = np.arange(3.0)
+>>> np.add(x1, x2)
+array([[  0.,   2.,   4.],
+       [  3.,   5.,   7.],
+       [  6.,   8.,  10.]])
+
+6.
+>>> Z = np.zeros(10)
+>>> Z[4] = 1
+>>> print(Z)
+[0. 0. 0. 0. 1. 0. 0. 0. 0. 0.]
+
+7.
+>>> Z = np.arange(10,50)
+>>> print(Z)
+[10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33  34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49]
+
+numpy.arange()
+与えられた間隔で等間隔の値を返す
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html
+
+9.
+>>> Z = np.arange(9).reshape(3,3)
+>>> print(Z)
+[[0 1 2]
+ [3 4 5]
+ [6 7 8]]
+
+numpy.ndarray.reshape()
+ndarray 配列の形状を変更する
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.reshape.html
+
+10.
+>>> nz = np.nonzero([1,2,0,0,4,0])
+>>> print(nz)
+(array([0, 1, 4], dtype=int64),)
+
+numpy.nonzero()
+非ゼロ要素のあるインデックスを各軸ごとに１次元配列にして返す
