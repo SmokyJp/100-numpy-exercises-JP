@@ -2,7 +2,7 @@
 >>> print(np.__version__)
 1.14.5
 
-.__version__
+numpy.__version__
 numpy のバージョン番号を取得
 
 >>> np.show_config()
@@ -34,7 +34,7 @@ lapack_opt_info:
     define_macros = [('HAVE_CBLAS', None)]
 >>>
 
-.show_config()
+numpy.show_config()
 使用している行列ライブラリを確認
 
 3.
@@ -42,7 +42,7 @@ lapack_opt_info:
 >>> print(Z)
 [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
 
-.zeros()
+numpy.zeros()
 すべての要素が 0 の配列を生成する
 https://docs.scipy.org/doc/numpy/reference/generated/numpy.zeros.html
 
@@ -134,3 +134,134 @@ https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.reshape.html
 
 numpy.nonzero()
 非ゼロ要素のあるインデックスを各軸ごとに１次元配列にして返す
+
+11.
+>>> Z = np.eye(3)
+>>> print(Z)
+[[1. 0. 0.]
+ [0. 1. 0.]
+ [0. 0. 1.]]
+
+numpy.eye()
+単位行列を生成する
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.eye.html
+
+12.
+>>> Z = np.random.random((3,3,3))
+>>> print(Z)
+[[[0.71082579 0.73571559 0.7776125 ]
+  [0.59539291 0.58251999 0.0935578 ]
+  [0.01053763 0.47575071 0.41812704]]
+
+ [[0.20696107 0.41316095 0.70655963]
+  [0.33625779 0.21294934 0.18813152]
+  [0.67080029 0.15956399 0.77085771]]
+
+ [[0.4612008  0.06095904 0.12876502]
+  [0.74507861 0.19707868 0.60894546]
+  [0.76347759 0.37706817 0.69185455]]]
+
+numpy.random.random()
+乱数を生成する
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.random.random.html
+
+13.
+>>> Z = np.random.random((10,10))
+>>> Zmin, Zmax = Z.min(), Z.max()
+>>> print(Zmin, Zmax)
+0.008234079802933891 0.9652612782201241
+
+numpy.min()
+最小値を求める
+
+numpy.max()
+最大値を求める
+
+14.
+>>> Z = np.random.random(30)
+>>> m = Z.mean()
+>>> print(m)
+0.4540177272226375
+
+numpy.mean()
+平均値を求める
+
+15.
+numpy.ones()
+全ての要素が 1 の行列を生成する
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.ones.html
+
+16.
+>>> Z = np.ones((10,10))
+>>> Z[1:-1,1:-1] = 0
+>>> Z = np.ones((5,5))
+>>> Z = np.pad(Z, pad_width=1, mode='constant', constant_values=0)
+>>> print(Z)
+[[0. 0. 0. 0. 0. 0. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 0. 0. 0. 0. 0. 0.]]
+
+numpy.pad()
+値を詰め込む
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.pad.html
+
+17.
+>>> print(0 * np.nan)
+nan
+>>> print(np.nan == np.nan)
+False
+>>> print(np.inf > np.nan)
+False
+>>> print(np.nan - np.nan)
+nan
+>>> print(0.3 == 3 * 0.1)
+False
+
+numpy.nan
+欠損値
+
+numpy.inf
+無限大
+
+18.
+>>> Z = np.diag(1+np.arange(4),k=-1)
+>>> print(Z)
+[[0 0 0 0 0]
+ [1 0 0 0 0]
+ [0 2 0 0 0]
+ [0 0 3 0 0]
+ [0 0 0 4 0]]
+
+numpy.diag()
+配列の対角成分を取り出す
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.diag.html
+
+numpy.arrange()
+連番や等差数列を生成する
+
+19.
+>>> Z = np.zeros((8,8),dtype=int)
+>>> Z[1::2,::2] = 1
+>>> Z[::2,1::2] = 1
+>>> print(Z)
+[[0 1 0 1 0 1 0 1]
+ [1 0 1 0 1 0 1 0]
+ [0 1 0 1 0 1 0 1]
+ [1 0 1 0 1 0 1 0]
+ [0 1 0 1 0 1 0 1]
+ [1 0 1 0 1 0 1 0]
+ [0 1 0 1 0 1 0 1]
+ [1 0 1 0 1 0 1 0]]
+
+
+20.
+>>> print(np.unravel_index(100,(6,7,8)))
+(1, 5, 4)
+
+numpy.unravel_index()
+一次元に変換したときの位置と行列の次元から、その行列の位置を計算する
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.unravel_index.html
