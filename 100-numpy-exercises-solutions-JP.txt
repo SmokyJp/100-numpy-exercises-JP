@@ -265,3 +265,130 @@ numpy.arrange()
 numpy.unravel_index()
 一次元に変換したときの位置と行列の次元から、その行列の位置を計算する
 https://docs.scipy.org/doc/numpy/reference/generated/numpy.unravel_index.html
+
+21.
+>>> Z = np.tile( np.array([[0,1],[1,0]]), (4,4))
+>>> print(Z)
+[[0 1 0 1 0 1 0 1]
+ [1 0 1 0 1 0 1 0]
+ [0 1 0 1 0 1 0 1]
+ [1 0 1 0 1 0 1 0]
+ [0 1 0 1 0 1 0 1]
+ [1 0 1 0 1 0 1 0]
+ [0 1 0 1 0 1 0 1]
+ [1 0 1 0 1 0 1 0]]
+
+numpy.tile()
+繰り返しで配列を作る
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.tile.html
+
+22.
+>>> Z = np.random.random((5,5))
+>>> Zmax, Zmin = Z.max(), Z.min()
+>>> Z = (Z - Zmin)/(Zmax - Zmin)
+>>> print(Z)
+[[0.38973115 0.23771418 0.75333856 0.87096402 0.5808677 ]
+ [0.86316942 0.61592379 0.45301403 0.72543609 0.88978301]
+ [0.46875535 0.         0.40163897 0.7719748  0.16274914]
+ [0.80260931 0.16991524 0.10436984 0.28942723 0.14161046]
+ [1.         0.19963566 0.25403345 0.83775085 0.87173854]]
+
+正規化：全ての要素を最大値が1で最小値が0の範囲に変換する
+
+23.
+numpy.dtype：データ型
+numpy.ubyte：データ型(符号なしバイト)
+
+24.
+>>> Z = np.dot(np.ones((5,3)), np.ones((3,2)))
+>>> print(Z)
+[[3. 3.]
+ [3. 3.]
+ [3. 3.]
+ [3. 3.]
+ [3. 3.]]
+>>> Z = np.ones((5,3)) @ np.ones((3,2))
+>>> print(Z)
+[[3. 3.]
+ [3. 3.]
+ [3. 3.]
+ [3. 3.]
+ [3. 3.]]
+
+25.
+>>> Z = np.arange(11)
+>>> Z[(3 < Z) & (Z <= 8)] *= -1
+>>> print(Z)
+[ 0  1  2  3 -4 -5 -6 -7 -8  9 10]
+
+否定：符号の反転
+
+26.
+>>> print(sum(range(5),-1))
+9
+>>> from numpy import *
+>>> print(sum(range(5),-1))
+10
+
+27.
+>>> Z=np.array([1, 2, 3])
+>>> Z**Z
+array([ 1,  4, 27], dtype=int32)
+>>> 2 << Z >> 2
+array([1, 2, 4], dtype=int32)
+>>> Z <- Z
+array([False, False, False])
+>>> 1j*Z
+array([0.+1.j, 0.+2.j, 0.+3.j])
+>>> Z/1/1
+array([1., 2., 3.])
+>>> Z<Z>Z
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ValueError: The truth value of an array with more than one element is ambiguous.
+ Use a.any() or a.all()
+
+28.
+>>> print(np.array(0) / np.array(0))
+__main__:1: RuntimeWarning: invalid value encountered in true_divide
+nan
+>>> print(np.array(0) // np.array(0))
+__main__:1: RuntimeWarning: divide by zero encountered in floor_divide
+0
+>>> print(np.array([np.nan]).astype(int).astype(float))
+[-2.14748365e+09]
+
+29.
+>>> Z = np.random.uniform(-10,+10,10)
+>>> print (np.copysign(np.ceil(np.abs(Z)), Z))
+[-8. -7. -7.  8.  8.  4.  4.  4. -5.  8.]
+
+np.random.uniform(low, high, size)
+low以上high未満の個数sizeの一様乱数
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html
+
+numpy.copysign()
+1番目の配列の各要素の符号を、2番目の配列の各要素の符号に変換する
+http://pageperso.lif.univ-mrs.fr/~francois.denis/IAAM1/numpy-html-1.14.0/reference/generated/numpy.copysign.html
+
+numpy.ceil()
+切り上げ(大きい側の整数に丸める)
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.ceil.html
+
+numpy.abs()
+絶対値
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.absolute.html
+
+30.
+>>> Z1 = np.random.randint(0,10,10)
+>>> Z2 = np.random.randint(0,10,10)
+>>> print(np.intersect1d(Z1,Z2))
+[1 3 5 8]
+
+numpy.random.randint(low, high, size)
+low以上high未満の個数sizeの整数乱数
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.random.randint.html
+
+numpy.intersect1d(x, y)
+1番目と2番目の引数の配列の共通要素を返す。結果はソートされて返る
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.intersect1d.html
