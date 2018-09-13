@@ -392,3 +392,108 @@ https://docs.scipy.org/doc/numpy/reference/generated/numpy.random.randint.html
 numpy.intersect1d(x, y)
 1番目と2番目の引数の配列の共通要素を返す。結果はソートされて返る
 https://docs.scipy.org/doc/numpy/reference/generated/numpy.intersect1d.html
+
+32.
+>>> np.sqrt(-1) == np.emath.sqrt(-1)
+__main__:1: RuntimeWarning: invalid value encountered in sqrt
+False
+
+numpy.sqrt()
+平方根を求める
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.sqrt.html
+
+33.
+>>> yesterday = np.datetime64('today', 'D') - np.timedelta64(1, 'D')
+>>> print(yesterday)
+2018-09-12
+>>> today     = np.datetime64('today', 'D')
+>>> print(today)
+2018-09-13
+>>> tomorrow  = np.datetime64('today', 'D') + np.timedelta64(1, 'D')
+>>> print(tomorrow)
+2018-09-14
+
+numpy.datetime64()
+numpy.timedelta64()
+https://docs.scipy.org/doc/numpy/reference/arrays.datetime.html
+
+34.
+>>> Z = np.arange('2016-07', '2016-08', dtype='datetime64[D]')
+>>> print(Z)
+['2016-07-01' '2016-07-02' '2016-07-03' '2016-07-04' '2016-07-05'
+ '2016-07-06' '2016-07-07' '2016-07-08' '2016-07-09' '2016-07-10'
+ '2016-07-11' '2016-07-12' '2016-07-13' '2016-07-14' '2016-07-15'
+ '2016-07-16' '2016-07-17' '2016-07-18' '2016-07-19' '2016-07-20'
+ '2016-07-21' '2016-07-22' '2016-07-23' '2016-07-24' '2016-07-25'
+ '2016-07-26' '2016-07-27' '2016-07-28' '2016-07-29' '2016-07-30'
+ '2016-07-31']
+
+35.
+>>> A = np.ones(3)*1
+>>> B = np.ones(3)*2
+>>> C = np.ones(3)*3
+>>> np.add(A,B,out=B)
+array([3., 3., 3.])
+>>> np.divide(A,2,out=A)
+array([0.5, 0.5, 0.5])
+>>> np.negative(A,out=A)
+array([-0.5, -0.5, -0.5])
+>>> np.multiply(A,B,out=A)
+array([-1.5, -1.5, -1.5])
+
+36.
+>>> Z = np.random.uniform(0,10,10)
+>>>
+>>> print (Z - Z%1)
+[9. 9. 9. 2. 0. 8. 1. 4. 9. 4.]
+>>> print (np.floor(Z))
+[9. 9. 9. 2. 0. 8. 1. 4. 9. 4.]
+>>> print (np.ceil(Z)-1)
+[9. 9. 9. 2. 0. 8. 1. 4. 9. 4.]
+>>> print (Z.astype(int))
+[9 9 9 2 0 8 1 4 9 4]
+>>> print (np.trunc(Z))
+[9. 9. 9. 2. 0. 8. 1. 4. 9. 4.]
+
+numpy.floor
+切り捨て
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.floor.html
+
+numpy.astype
+型変換
+
+numpy.trunc
+切り捨て
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.trunc.html
+
+37.
+>>> Z = np.zeros((5,5))
+>>> Z += np.arange(5)
+>>> print(Z)
+[[0. 1. 2. 3. 4.]
+ [0. 1. 2. 3. 4.]
+ [0. 1. 2. 3. 4.]
+ [0. 1. 2. 3. 4.]
+ [0. 1. 2. 3. 4.]]
+
+38.
+numpy.fromiter
+反復可能なオブジェクトから新しい1次元配列を作成する
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.fromiter.html
+
+39.
+>>> generate = (x for x in range(10))
+>>> np.fromiter(generate, np.float)
+array([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])
+
+40.
+>>> Z = np.random.random(10)
+>>> Z.sort()
+>>> print(Z)
+[0.04863882 0.35065198 0.39074756 0.40772236 0.53910219 0.58716161
+ 0.62094915 0.64851612 0.93948351 0.95179935]
+
+numpy.sort()
+ソート
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.sort.html
+
